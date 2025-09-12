@@ -23,9 +23,10 @@ RUN apt update && apt install -y --no-install-recommends \
     && rm -rf /usr/local/lib/python3.12/site-packages
 
 # Copy and set up entrypoint
-COPY onnx_cpu_entrypoint.sh /onnx_cpu_entrypoint.sh
-RUN chmod +x /onnx_cpu_entrypoint.sh
+COPY decompress.sh /decompress.sh
+RUN chmod +x /decompress.sh
 
 # Set up entrypoint and command
-ENTRYPOINT ["/onnx_cpu_entrypoint.sh"]
+ENTRYPOINT ["/decompress.sh"]
 CMD ["jupyter", "lab", "--ip", "0.0.0.0", "--port", "8888", "--allow-root", "--no-browser", "--NotebookApp.token=1111"]
+
