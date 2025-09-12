@@ -1,13 +1,10 @@
 FROM python:3.12.11-slim
 
 RUN apt update && apt install -y --no-install-recommends \
-        wget \
+        libzbar0t64 \
     && rm -rf /var/lib/apt/lists/* \
-    && wget https://raw.githubusercontent.com/dium6i/my_utils/refs/heads/main/linux_gnu_libs.tar.gz \
-    && tar -zxf linux_gnu_libs.tar.gz -C /usr/lib/x86_64-linux-gnu \
-    && ldconfig \
     && pip install --no-cache-dir \
-        opencv-python \
+        opencv-python-headless \
         onnxruntime \
         requests \
         fastapi \
