@@ -1,5 +1,6 @@
 FROM python:3.12.11-slim
 
+# Install dependencies
 RUN apt update && apt install -y --no-install-recommends \
         libzbar0t64 \
     && rm -rf /var/lib/apt/lists/* \
@@ -22,11 +23,10 @@ RUN apt update && apt install -y --no-install-recommends \
     && tar -zcf /usr/local/lib/python3.12/sp.tar.gz -C /usr/local/lib/python3.12 site-packages \
     && rm -rf /usr/local/lib/python3.12/site-packages
 
-ENTRYPOINT ["/bin/sh", "-c", "echo 'Decompressing data...'; \
-   if [ -f /usr/local/lib/python3.12/sp.tar.gz ]; then \
-     tar -zxf /usr/local/lib/python3.12/sp.tar.gz -C /usr/local/lib/python3.12 && rm -f /usr/local/lib/python3.12/sp.tar.gz && \
-     echo 'Data decompression completed!'; \
-   else \
-     echo 'Archive not found — skipping decompression.'; \
-   fi; \
-   exec \"$@\"", "--"]
+# Copy and set up entrypoint
+COPY onnx_cpu_entrypoint.sh /onnx_cpu_entrypoint.sh
+RUN chmod +x /onnx_cpu_entrypoint.sh
+
+# Set up entrypoint and command
+ENTRYPOINT ["/onnx_cpu_entrypoint.sh"]
+CMD ["bash"]
