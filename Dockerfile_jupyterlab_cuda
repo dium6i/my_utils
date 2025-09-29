@@ -1,0 +1,29 @@
+FROM nvidia/cuda/python:12.5.1_3.12.10
+
+# Install dependencies
+RUN pip install --no-cache-dir \
+        opencv-python-headless \
+        onnxruntime \
+        jupyterlab \
+        requests \
+        loguru \
+        boto3 \
+        PyYAML \
+        pycryptodome \
+        pillow \
+        pyclipper \
+        shapely \
+        tqdm \
+        python-multipart \
+        pyzbar \
+    && tar -zcf /usr/local/lib/python3.12/sp.tar.gz -C /usr/local/lib/python3.12 site-packages \
+    && rm -rf /usr/local/lib/python3.12/site-packages
+
+# Copy and set up entrypoint
+COPY decompress.sh /decompress.sh
+RUN chmod +x /decompress.sh
+
+# Set up entrypoint and command
+ENTRYPOINT ["/decompress.sh"]
+CMD ["jupyter", "lab", "--ip", "0.0.0.0", "--port", "8888", "--allow-root", "--no-browser", "--NotebookApp.token=1111"]
+
