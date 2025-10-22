@@ -3,6 +3,7 @@ FROM python:3.12.11-slim
 # Install dependencies
 RUN apt update && apt install -y --no-install-recommends \
         libzbar0t64 \
+        libmagic-dev \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --no-cache-dir \
         opencv-python-headless \
@@ -19,6 +20,7 @@ RUN apt update && apt install -y --no-install-recommends \
         shapely \
         tqdm \
         python-multipart \
+        python-magic \
         pyzbar \
     && tar -zcf /usr/local/lib/python3.12/sp.tar.gz -C /usr/local/lib/python3.12 site-packages \
     && rm -rf /usr/local/lib/python3.12/site-packages
