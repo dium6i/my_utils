@@ -1,7 +1,10 @@
 FROM nvidia/cuda/python:12.5.1_3.12.10
 
 # Install dependencies
-RUN pip install --no-cache-dir \
+RUN apt update && apt install -y --no-install-recommends \
+        libmagic-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir \
         opencv-python-headless \
         onnxruntime \
         jupyterlab \
@@ -15,6 +18,7 @@ RUN pip install --no-cache-dir \
         shapely \
         tqdm \
         python-multipart \
+        python-magic \
         pyzbar \
     && tar -zcf /usr/local/lib/python3.12/sp.tar.gz -C /usr/local/lib/python3.12 site-packages \
     && rm -rf /usr/local/lib/python3.12/site-packages
@@ -26,4 +30,5 @@ RUN chmod +x /decompress.sh
 # Set up entrypoint and command
 ENTRYPOINT ["/decompress.sh"]
 CMD ["jupyter", "lab", "--ip", "0.0.0.0", "--port", "8888", "--allow-root", "--no-browser", "--NotebookApp.token=1111"]
+
 
